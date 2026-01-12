@@ -1,38 +1,40 @@
-# OCR Benchmark Tool
+# Arabic OCR Benchmark Tool
 
-对比测试 Gemini / Mistral OCR 模型的阿拉伯语识别准确率。
+[中文文档](./README.zh-CN.md)
 
-## 目录结构
+Benchmark tool for comparing Gemini / Mistral OCR models on Arabic text recognition accuracy.
+
+## Directory Structure
 
 ```
 benchmark/
-├── benchmark_test.py      # 测试脚本
-├── config.example.env     # 配置模板
-├── .env                   # API密钥 (需自行创建)
-├── requirements.txt       # 依赖
-├── samples/               # 测试PDF文件
-├── ground_truth/          # 人工校对文本
-└── results/               # 测试报告输出
+├── benchmark_test.py      # Main benchmark script
+├── config.example.env     # Configuration template
+├── .env                   # API keys (create your own)
+├── requirements.txt       # Dependencies
+├── samples/               # Test PDF files
+├── ground_truth/          # Human-verified text
+└── results/               # Benchmark reports
 ```
 
-## 快速开始
+## Quick Start
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**系统依赖** (pdf2image 需要):
+**System dependencies** (required by pdf2image):
 - macOS: `brew install poppler`
 - Ubuntu: `apt-get install poppler-utils`
-- Windows: 下载 [poppler](https://github.com/oschwartz10612/poppler-windows/releases)
+- Windows: Download [poppler](https://github.com/oschwartz10612/poppler-windows/releases)
 
-### 2. 配置 API 密钥
+### 2. Configure API Keys
 
 ```bash
 cp config.example.env .env
-# 编辑 .env 填入你的 API 密钥
+# Edit .env and add your API keys
 ```
 
 ```env
@@ -42,93 +44,91 @@ PRIMARY_LANGUAGE=Arabic
 PDF_DPI=200
 ```
 
-### 3. 准备测试样本
+### 3. Prepare Test Samples
 
-1. 将 PDF 放入 `samples/` 目录
-2. 在 `ground_truth/` 创建对应的 `.txt` 文件（文件名需与 PDF 相同）
+1. Place PDF files in `samples/` directory
+2. Create corresponding `.txt` files in `ground_truth/` (filename must match PDF)
 
-**重要**: ground_truth 文件需要用 `---` 分隔每一页的内容：
+**Important**: Separate each page's content with `---` in ground_truth files:
 
 ```text
-第一页内容...
-这是第一页的文字
+First page content...
 
 ---
-第二页内容...
-这是第二页的文字
+Second page content...
 
 ---
-第三页内容...
+Third page content...
 ```
 
-### 4. 运行测试
+### 4. Run Benchmark
 
 ```bash
-# 测试所有模型
+# Test all models
 python benchmark_test.py
 
-# 只测试 Gemini 模型
+# Test Gemini models only
 python benchmark_test.py --gemini-only
 
-# 只测试 Mistral 模型
+# Test Mistral models only
 python benchmark_test.py --mistral-only
 
-# 指定特定模型
+# Test specific models
 python benchmark_test.py --models gemini-3-pro-preview mistral-ocr-latest
 ```
 
-## 可用模型
+## Available Models
 
-| 模型 | 类型 | 说明 |
-|------|------|------|
-| `gemini-3-pro-preview` | Gemini | 最高准确率，较慢 |
-| `gemini-3-flash-preview` | Gemini | 快速，准确率较高 |
-| `gemini-2.5-pro` | Gemini | 高准确率，成本适中 |
-| `gemini-2.5-flash` | Gemini | 最快，性价比高 |
-| `mistral-ocr-latest` | Mistral | 专用 OCR 模型 |
+| Model | Provider | Notes |
+|-------|----------|-------|
+| `gemini-3-pro-preview` | Gemini | Highest accuracy, slower |
+| `gemini-3-flash-preview` | Gemini | Fast, good accuracy |
+| `gemini-2.5-pro` | Gemini | High accuracy, moderate cost |
+| `gemini-2.5-flash` | Gemini | Fastest, best value |
+| `mistral-ocr-latest` | Mistral | Dedicated OCR model |
 
-## 测试报告
+## Benchmark Reports
 
-报告保存在 `results/` 目录，包含：
+Reports are saved in `results/` directory:
 
-- `benchmark_report_YYYYMMDD_HHMMSS.md` - Markdown 格式报告
-- `benchmark_raw_YYYYMMDD_HHMMSS.json` - 原始数据 (JSON)
+- `benchmark_report_YYYYMMDD_HHMMSS.md` - Markdown report
+- `benchmark_raw_YYYYMMDD_HHMMSS.json` - Raw data (JSON)
 
-### 指标说明
+### Metrics
 
-| 指标 | 全称 | 说明 |
-|------|------|------|
-| **CER** | Character Error Rate | 字符级错误率，越低越好 |
-| **WER** | Word Error Rate | 词级错误率，越低越好 |
+| Metric | Full Name | Description |
+|--------|-----------|-------------|
+| **CER** | Character Error Rate | Character-level error rate (lower is better) |
+| **WER** | Word Error Rate | Word-level error rate (lower is better) |
 
-## 实测结果参考
+## Benchmark Results
 
-以下是 14 页中文+阿拉伯语混合 PDF 的测试结果 (2026-01-12):
+Test results on a 14-page Chinese + Arabic mixed PDF (2026-01-12):
 
-| 模型 | CER ↓ | WER ↓ | 速度 | 成本/页 |
-|------|-------|-------|------|---------|
-| gemini-3-pro-preview | **1.77%** | **4.27%** | 35s/页 | $0.0048 |
-| gemini-2.5-pro | 2.12% | 4.93% | 25s/页 | $0.0034 |
-| gemini-3-flash-preview | 3.19% | 4.68% | 13s/页 | $0.0002 |
-| gemini-2.5-flash | 5.69% | 8.68% | 7s/页 | $0.0002 |
-| mistral-ocr-latest | 12.01% | 15.47% | 3s/页 | $0.002 |
+| Model | CER ↓ | WER ↓ | Speed | Cost/Page |
+|-------|-------|-------|-------|-----------|
+| gemini-3-pro-preview | **1.77%** | **4.27%** | 35s/page | $0.0048 |
+| gemini-2.5-pro | 2.12% | 4.93% | 25s/page | $0.0034 |
+| gemini-3-flash-preview | 3.19% | 4.68% | 13s/page | $0.0002 |
+| gemini-2.5-flash | 5.69% | 8.68% | 7s/page | $0.0002 |
+| mistral-ocr-latest | 12.01% | 15.47% | 3s/page | $0.002 |
 
-**结论**: `gemini-3-pro-preview` 准确率最高，`gemini-3-flash` 性价比最优。
+**Conclusion**: `gemini-3-pro-preview` offers the highest accuracy; `gemini-2.5-flash` provides the best value.
 
-## 常见问题
+## FAQ
 
-### Q: ground_truth 没有按页分隔怎么办？
+### Q: What if ground_truth is not page-separated?
 
-脚本会警告，但仍可运行。此时只输出整文档对比，不输出逐页对比。
+The script will warn but continue. Results will be compared at document level instead of page level.
 
-### Q: 如何获取 ground_truth？
+### Q: How to create ground_truth?
 
-1. 手动人工校对 PDF 内容
-2. 或使用最高准确率模型 (gemini-3-pro-preview) 识别后校对
-3. 每页内容之间用单独一行 `---` 分隔
+1. Manually proofread the PDF content
+2. Or use the highest accuracy model (gemini-3-pro-preview) and proofread its output
+3. Separate each page with a single line containing `---`
 
-### Q: 测试大文件很慢？
+### Q: Testing large files is slow?
 
-- 降低 `PDF_DPI` 值 (如 150)
-- 使用 `--models` 只测试需要的模型
-- 先用少量页面测试，确认效果后再批量处理
+- Lower `PDF_DPI` value (e.g., 150)
+- Use `--models` to test only specific models
+- Test with a few pages first, then process in batch
