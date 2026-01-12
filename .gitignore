@@ -1,0 +1,30 @@
+# API Keys & Secrets
+.env
+*.env
+.env.*
+!.env.example
+config.example.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+
+# Test data (user-specific)
+samples/*.pdf
+samples/*.docx
+ground_truth/*.txt
+
+# Results (may contain sensitive OCR output)
+results/
+
+# Keep directories with .gitkeep
+!samples/.gitkeep
+!ground_truth/.gitkeep
+!results/.gitkeep
