@@ -115,7 +115,7 @@ python benchmark_test.py --models gemini-3-pro-preview mistral-ocr-latest
 | gemini-2.5-flash | 5.69% | 8.68% | 7s/页 | $0.0002 |
 | mistral-ocr-latest | 12.01% | 15.47% | 3s/页 | $0.002 |
 
-**结论**: `gemini-3-pro-preview` 准确率最高，`gemini-2.5-flash` 性价比最优。
+**结论**: `gemini-3-pro-preview` 准确率最高；`gemini-3-flash-preview` 性价比最优（成本与 2.5-flash 相同，但准确率显著更高）。
 
 ## 常见问题
 

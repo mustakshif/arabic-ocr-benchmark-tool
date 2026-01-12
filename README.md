@@ -113,7 +113,7 @@ Test results on a 14-page Chinese + Arabic mixed PDF (2026-01-12):
 | gemini-2.5-flash | 5.69% | 8.68% | 7s/page | $0.0002 |
 | mistral-ocr-latest | 12.01% | 15.47% | 3s/page | $0.002 |
 
-**Conclusion**: `gemini-3-pro-preview` offers the highest accuracy; `gemini-2.5-flash` provides the best value.
+**Conclusion**: `gemini-3-pro-preview` offers the highest accuracy; `gemini-3-flash-preview` provides the best value (same cost as 2.5-flash but significantly better accuracy).
 
 ## FAQ
 
