@@ -3,7 +3,7 @@
 *.env
 .env.*
 !.env.example
-config.example.env
+!config.example.env
 
 # OS files
 .DS_Store
