@@ -124,23 +124,27 @@ def image_to_base64(image: Image.Image) -> str:
 
 
 class GeminiTester:
-    # Pricing as of Jan 2026 (Google AI Studio / Vertex AI rates, context ≤200K)
+    # Pricing as of Jan 2026 (Google AI Studio / Vertex AI standard rates, context ≤200K)
+    # Pro and Gemini-3 models have thinking tokens billed separately
     # Source: https://cloud.google.com/vertex-ai/generative-ai/pricing
     MODELS = {
         "gemini-3-pro-preview": {
             "name": "gemini-3-pro-preview",
             "input_cost_per_million": 2.00,
-            "output_cost_per_million": 6.00
+            "output_cost_per_million": 6.00,
+            "thinking_cost_per_million": 1.00
         },
         "gemini-3-flash-preview": {
             "name": "gemini-3-flash-preview",
             "input_cost_per_million": 0.50,
-            "output_cost_per_million": 1.50
+            "output_cost_per_million": 1.50,
+            "thinking_cost_per_million": 0.30
         },
         "gemini-2.5-pro": {
             "name": "gemini-2.5-pro",
             "input_cost_per_million": 1.25,
-            "output_cost_per_million": 5.00
+            "output_cost_per_million": 5.00,
+            "thinking_cost_per_million": 1.00
         },
         "gemini-2.5-flash": {
             "name": "gemini-2.5-flash",
@@ -183,12 +187,25 @@ Use Markdown formatting. Do not translate. Output text only."""
 
         text = response.text.strip() if response.text else ""
 
-        image_tokens = self._estimate_image_tokens(image)
-        prompt_tokens = 50
-        input_tokens = image_tokens + prompt_tokens
-        output_tokens = len(text) // 4
+        usage_meta = {}
+        if hasattr(response, 'usage_metadata') and response.usage_metadata:
+            usage_meta = response.usage_metadata
+        
+        input_tokens = getattr(usage_meta, 'prompt_token_count', None)
+        output_tokens = getattr(usage_meta, 'candidates_token_count', None)
+        thinking_tokens = getattr(usage_meta, 'thoughts_token_count', 0) or 0
+        
+        if input_tokens is None:
+            image_tokens = self._estimate_image_tokens(image)
+            input_tokens = image_tokens + 50
+        if output_tokens is None:
+            output_tokens = len(text) // 4
+        
         cost = (input_tokens * model_info["input_cost_per_million"] +
                 output_tokens * model_info["output_cost_per_million"]) / 1_000_000
+        
+        if thinking_tokens > 0 and "thinking_cost_per_million" in model_info:
+            cost += (thinking_tokens * model_info["thinking_cost_per_million"]) / 1_000_000
 
         return text, elapsed, cost
 

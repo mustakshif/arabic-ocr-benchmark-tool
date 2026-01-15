@@ -115,7 +115,7 @@ python benchmark_test.py --models gemini-3-pro-preview mistral-ocr-latest
 | gemini-2.5-flash | 5.69% | 8.68% | 7s/页 | $0.0005 |
 | mistral-ocr-latest | 12.01% | 15.47% | 3s/页 | $0.002 |
 
-> **定价说明**：成本估算基于 2026-01 Vertex AI 官方定价（context ≤200K）。每页按约 800 input tokens（图片）+ 300 output tokens 计算。实际成本因图片分辨率和输出文本长度而异。
+> **定价说明**：成本估算基于 2026-01 Vertex AI 官方定价（context ≤200K）。gemini-3 和 pro 模型会产生额外的 thinking tokens（内部推理），已计入成本。实际成本因图片分辨率、输出文本长度和模型推理复杂度而异。
 
 **结论**: `gemini-2.5-flash` 性价比最优（成本最低）；`gemini-3-pro-preview` 准确率最高但成本较高。
 

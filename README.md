@@ -113,7 +113,7 @@ Test results on a 14-page Chinese + Arabic mixed PDF (2026-01-12):
 | gemini-2.5-flash | 5.69% | 8.68% | 7s/page | $0.0005 |
 | mistral-ocr-latest | 12.01% | 15.47% | 3s/page | $0.002 |
 
-> **Pricing Note**: Cost estimates based on Jan 2026 Vertex AI official rates (context ≤200K). Calculated at ~800 input tokens (image) + 300 output tokens per page. Actual costs vary with image resolution and output text length.
+> **Pricing Note**: Cost estimates based on Jan 2026 Vertex AI official rates (context ≤200K). Gemini-3 and Pro models generate additional thinking tokens (internal reasoning), which are included in cost calculations. Actual costs vary with image resolution, output text length, and model reasoning complexity.
 
 **Conclusion**: `gemini-2.5-flash` offers the best value (lowest cost); `gemini-3-pro-preview` has the highest accuracy but at higher cost.
 
