@@ -105,17 +105,19 @@ python benchmark_test.py --models gemini-3-pro-preview mistral-ocr-latest
 
 ## 实测结果参考
 
-以下是 14 页中文+阿拉伯语混合 PDF 的测试结果 (2026-01-12):
+以下是 14 页中文+阿拉伯语混合 PDF 的测试结果 (2026-01-12)：
 
 | 模型 | CER ↓ | WER ↓ | 速度 | 成本/页 |
 |------|-------|-------|------|---------|
-| gemini-3-pro-preview | **1.77%** | **4.27%** | 35s/页 | $0.0048 |
-| gemini-2.5-pro | 2.12% | 4.93% | 25s/页 | $0.0034 |
-| gemini-3-flash-preview | 3.19% | 4.68% | 13s/页 | $0.0002 |
-| gemini-2.5-flash | 5.69% | 8.68% | 7s/页 | $0.0002 |
+| gemini-3-pro-preview | **1.77%** | **4.27%** | 35s/页 | $0.0034 |
+| gemini-2.5-pro | 2.12% | 4.93% | 25s/页 | $0.0025 |
+| gemini-3-flash-preview | 3.19% | 4.68% | 13s/页 | $0.0009 |
+| gemini-2.5-flash | 5.69% | 8.68% | 7s/页 | $0.0005 |
 | mistral-ocr-latest | 12.01% | 15.47% | 3s/页 | $0.002 |
 
-**结论**: `gemini-3-pro-preview` 准确率最高；`gemini-3-flash-preview` 性价比最优（成本与 2.5-flash 相同，但准确率显著更高）。
+> **定价说明**：成本估算基于 2026-01 Vertex AI 官方定价（context ≤200K）。每页按约 800 input tokens（图片）+ 300 output tokens 计算。实际成本因图片分辨率和输出文本长度而异。
+
+**结论**: `gemini-2.5-flash` 性价比最优（成本最低）；`gemini-3-pro-preview` 准确率最高但成本较高。
 
 ## 常见问题
 

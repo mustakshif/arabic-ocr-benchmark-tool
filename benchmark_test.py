@@ -124,26 +124,28 @@ def image_to_base64(image: Image.Image) -> str:
 
 
 class GeminiTester:
+    # Pricing as of Jan 2026 (Google AI Studio / Vertex AI rates, context ≤200K)
+    # Source: https://cloud.google.com/vertex-ai/generative-ai/pricing
     MODELS = {
         "gemini-3-pro-preview": {
             "name": "gemini-3-pro-preview",
             "input_cost_per_million": 2.00,
-            "output_cost_per_million": 12.0
+            "output_cost_per_million": 6.00
         },
         "gemini-3-flash-preview": {
             "name": "gemini-3-flash-preview",
-            "input_cost_per_million": 0.15,
-            "output_cost_per_million": 0.60
+            "input_cost_per_million": 0.50,
+            "output_cost_per_million": 1.50
         },
         "gemini-2.5-pro": {
             "name": "gemini-2.5-pro",
             "input_cost_per_million": 1.25,
-            "output_cost_per_million": 10.0
+            "output_cost_per_million": 5.00
         },
         "gemini-2.5-flash": {
             "name": "gemini-2.5-flash",
-            "input_cost_per_million": 0.15,
-            "output_cost_per_million": 0.60
+            "input_cost_per_million": 0.30,
+            "output_cost_per_million": 1.00
         }
     }
 
@@ -181,12 +183,28 @@ Use Markdown formatting. Do not translate. Output text only."""
 
         text = response.text.strip() if response.text else ""
 
-        input_tokens = 300
+        image_tokens = self._estimate_image_tokens(image)
+        prompt_tokens = 50
+        input_tokens = image_tokens + prompt_tokens
         output_tokens = len(text) // 4
         cost = (input_tokens * model_info["input_cost_per_million"] +
                 output_tokens * model_info["output_cost_per_million"]) / 1_000_000
 
         return text, elapsed, cost
+
+    def _estimate_image_tokens(self, image: Image.Image) -> int:
+        """Estimate token count for an image based on its dimensions.
+        
+        Google charges ~258 tokens for a 1024x1024 image.
+        For larger images, tokens scale proportionally.
+        """
+        width, height = image.size
+        pixels = width * height
+        base_pixels = 1024 * 1024
+        base_tokens = 258
+        
+        estimated_tokens = int((pixels / base_pixels) * base_tokens)
+        return max(estimated_tokens, base_tokens)
 
 
 class MistralTester:

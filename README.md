@@ -107,13 +107,15 @@ Test results on a 14-page Chinese + Arabic mixed PDF (2026-01-12):
 
 | Model | CER ↓ | WER ↓ | Speed | Cost/Page |
 |-------|-------|-------|-------|-----------|
-| gemini-3-pro-preview | **1.77%** | **4.27%** | 35s/page | $0.0048 |
-| gemini-2.5-pro | 2.12% | 4.93% | 25s/page | $0.0034 |
-| gemini-3-flash-preview | 3.19% | 4.68% | 13s/page | $0.0002 |
-| gemini-2.5-flash | 5.69% | 8.68% | 7s/page | $0.0002 |
+| gemini-3-pro-preview | **1.77%** | **4.27%** | 35s/page | $0.0034 |
+| gemini-2.5-pro | 2.12% | 4.93% | 25s/page | $0.0025 |
+| gemini-3-flash-preview | 3.19% | 4.68% | 13s/page | $0.0009 |
+| gemini-2.5-flash | 5.69% | 8.68% | 7s/page | $0.0005 |
 | mistral-ocr-latest | 12.01% | 15.47% | 3s/page | $0.002 |
 
-**Conclusion**: `gemini-3-pro-preview` offers the highest accuracy; `gemini-3-flash-preview` provides the best value (same cost as 2.5-flash but significantly better accuracy).
+> **Pricing Note**: Cost estimates based on Jan 2026 Vertex AI official rates (context ≤200K). Calculated at ~800 input tokens (image) + 300 output tokens per page. Actual costs vary with image resolution and output text length.
+
+**Conclusion**: `gemini-2.5-flash` offers the best value (lowest cost); `gemini-3-pro-preview` has the highest accuracy but at higher cost.
 
 ## FAQ
 
